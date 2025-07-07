@@ -1,0 +1,38 @@
+{
+  "name": "artist-final",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "dev:clear": "rimraf node_modules .vite dist && npm install && npm run dev"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "country-state-city": "^3.2.1",
+    "firebase": "^11.9.1",
+    "i18n-iso-countries": "^7.14.0",
+    "react": "^19.1.0",
+    "react-datepicker": "^8.4.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.2",
+    "react-select": "^5.10.1",
+    "react-toastify": "^11.0.5",
+    "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react-swc": "^3.10.2",
+    "eslint": "^9.29.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.2.0",
+    "rimraf": "^6.0.1",
+    "vite": "^7.0.0"
+  }
+}
