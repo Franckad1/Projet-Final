@@ -1,7 +1,7 @@
 # 🔐 Admin Dashboard – React + Vite + Firebase
 
 Ce projet est un site administrateur construit avec **React 19**, **Vite 7**, **Firebase (Auth + Hosting)**, et **Tailwind CSS**.  
-Il permet la gestion des utilisateurs via une interface sécurisée, avec authentification Firebase et déploiement via Frebase Hosting.
+Il permet la gestion des utilisateurs via une interface sécurisée, avec authentification Firebase et déploiement via Firebase Hosting.
 
 ---
 
