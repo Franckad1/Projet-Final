@@ -70,7 +70,7 @@ Suivez le get started et une fois prêt à déployer(firebase deploy onlyhosting
 bash:
 npm run build
 firebase deploy
-(Sauf si vous maitriser le hosting garder le hosting en public (Entrée) ,choisissez la version one page index.html(y) et eviter d'intégrer github(n) )
+(Sauf si vous maitriser le hosting garder le hosting en dist (Entrée) ,choisissez la version one page index.html(y),eviter d'intégrer github(n) et eviter d'overwrite)
 
 ⚠️ Assurez-vous d’avoir bien initialisé Firebase
 
