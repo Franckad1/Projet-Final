@@ -2,7 +2,7 @@ import { doCreateUserWithEmailAndPassword } from "../../..//Providers/authProvid
 import { useState } from "react";
 import { useAuth } from "../../../contexts/auth";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-
+//Pas Commenté car pas demander
 const Register = () => {
   const { userLoggedIn } = useAuth();
   const navigate = useNavigate();

@@ -4,12 +4,19 @@ import dbProvider from "../../Providers/dbProvider";
 import { useAuth } from "../../contexts/auth";
 
 const Home = () => {
+  // État pour stocker la liste des événements
   const [events, setEvents] = useState([]);
+
+  // État pour afficher ou non la popup de confirmation
   const [showPopup, setShowPopup] = useState(false);
+
+  // Stocke l'identifiant de l'événement sélectionné pour suppression
   const [eventToDelete, setEventToDelete] = useState(null);
+
   const navigate = useNavigate();
   const { userLoggedIn } = useAuth();
 
+  // Récupère tous les événements au chargement de la page
   useEffect(() => {
     const getAllData = async () => {
       const list = await dbProvider.getAllData("events");
@@ -18,11 +25,13 @@ const Home = () => {
     getAllData();
   }, []);
 
+  // Ouvre la popup de confirmation pour supprimer un événement
   const handleDeleteClick = (id) => {
     setEventToDelete(id);
     setShowPopup(true);
   };
 
+  // Confirme la suppression de l'événement sélectionné
   const confirmDelete = async () => {
     if (eventToDelete) {
       await dbProvider.deleteData("events", eventToDelete);
@@ -33,6 +42,7 @@ const Home = () => {
     }
   };
 
+  // Annule la suppression d'un événement
   const cancelDelete = () => {
     setEventToDelete(null);
     setShowPopup(false);
@@ -42,7 +52,7 @@ const Home = () => {
     <>
       {userLoggedIn ? (
         <div className="max-w-5xl mx-auto pt-16 px-4 sm:px-6 lg:px-8">
-          {/* Add button */}
+          {/* Bouton pour ajouter un nouvel événement */}
           <div className="text-right mb-8">
             <button
               onClick={() => navigate("/form/0")}
@@ -52,7 +62,7 @@ const Home = () => {
             </button>
           </div>
 
-          {/* Empty state */}
+          {/* Affichage quand aucun événement n'est enregistré */}
           {events.length === 0 ? (
             <div className="text-center py-16">
               <svg
@@ -76,6 +86,7 @@ const Home = () => {
               </p>
             </div>
           ) : (
+            // Affichage de la liste des événements
             <div className="space-y-6">
               <div className="text-left mb-8">
                 <p className="px-4 py-2 text-lg sm:text-base font-medium text-white">
@@ -84,6 +95,7 @@ const Home = () => {
                 </p>
               </div>
 
+              {/* Parcours de chaque événement */}
               {events.map((event) => (
                 <div
                   key={event.id}
@@ -93,7 +105,7 @@ const Home = () => {
                       : "bg-red-600 hover:bg-red-700"
                   }`}
                 >
-                  {/* Delete button */}
+                  {/* Bouton de suppression */}
                   <button
                     type="button"
                     onClick={() => handleDeleteClick(event.id)}
@@ -103,6 +115,7 @@ const Home = () => {
                     ✕
                   </button>
 
+                  {/* Lien vers la page de modification de l’événement */}
                   <Link to={`/Form/${event.id}`}>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm">
                       <div className="flex">
@@ -152,7 +165,7 @@ const Home = () => {
             </div>
           )}
 
-          {/* Popup de confirmation */}
+          {/* Fenêtre de confirmation de suppression */}
           {showPopup && (
             <div className="fixed inset-0 flex items-center justify-center backdrop-blur-xs backdrop-brightness-75 bg-transparent z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg text-center w-80">
@@ -178,8 +191,10 @@ const Home = () => {
           )}
         </div>
       ) : (
+        // Message si l'utilisateur n'est pas connecté
         <div className="flex flex-1 justify-center items-center text-center mt-80">
           <p className="text-7xl text-gray-500">Vous ne passerez PAS!!!!!!!</p>
+          <Link to={"/"}> Retourne D'où tu viens</Link>
         </div>
       )}
     </>

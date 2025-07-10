@@ -10,9 +10,11 @@ import fr from "i18n-iso-countries/langs/fr.json";
 import { ToastContainer, toast } from "react-toastify";
 import { useAuth } from "../../contexts/auth";
 
+// Enregistrement du support de la langue française pour la librairie des pays
 countries.registerLocale(fr);
 
 const Form = () => {
+  // Déclaration des états locaux du formulaire
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
@@ -22,10 +24,11 @@ const Form = () => {
   const [cityOptions, setCityOptions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { id } = useParams();
-  const { userLoggedIn } = useAuth();
-  const navigate = useNavigate();
+  const { id } = useParams(); // Récupération de l’ID dans l’URL
+  const { userLoggedIn } = useAuth(); // Vérifie si l’utilisateur est connecté
+  const navigate = useNavigate(); // Pour rediriger après soumission
 
+  // Remplissage de la liste des pays au chargement initial
   useEffect(() => {
     const allCountries = Object.entries(
       countries.getNames("fr", { select: "official" })
@@ -36,9 +39,12 @@ const Form = () => {
     setCountryOptions(allCountries);
   }, []);
 
+  // Si un ID est présent, on récupère les données correspondantes à modifier
   useEffect(() => {
     const getAllData = async () => {
       const list = await dbProvider.getAllData("events");
+
+      // Recherche de l’événement à modifier, sinon données par défaut
       const event = list.reduce(
         (result, value) => {
           if (id === value.id) result = value;
@@ -56,6 +62,7 @@ const Form = () => {
         }
       );
 
+      // Préparation des valeurs pré-remplies
       const selectedCountry = countryOptions.find(
         (c) => c.label === event.data.pays
       );
@@ -69,6 +76,7 @@ const Form = () => {
       setPlace(event.data.lieux);
       setAvailable(event.data.disponibilite === "available");
 
+      // Chargement des villes en fonction du pays sélectionné
       if (selectedCode) {
         const cities = City.getCitiesOfCountry(selectedCode).map((city) => ({
           label: city.name,
@@ -81,9 +89,12 @@ const Form = () => {
     getAllData();
   }, [id, countryOptions]);
 
+  // Soumission du formulaire
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
+
+    // Validation des champs
     if (city === "") {
       toast.error("City is required!");
       return;
@@ -95,6 +106,7 @@ const Form = () => {
       return;
     }
 
+    // Données à envoyer à la base
     const eventData = {
       date,
       ville: city,
@@ -103,15 +115,18 @@ const Form = () => {
       disponibilite: available ? "available" : "sold out",
     };
 
+    // Ajout ou mise à jour selon l’ID
     if (id === "0") {
       await dbProvider.addData(eventData, "events");
     } else {
       await dbProvider.setData(eventData, "events", id);
     }
+
     setLoading(false);
-    navigate("/home");
+    navigate("/home"); // Redirection après enregistrement
   };
 
+  // Personnalisation de l’apparence du sélecteur
   const customSelectStyles = {
     control: (base, state) => ({
       ...base,
@@ -147,6 +162,7 @@ const Form = () => {
     <>
       {userLoggedIn ? (
         <div className="max-w-xl mx-auto bg-gray-900 shadow-md rounded-xl px-4 sm:px-6 py-8 mt-15">
+          {/* Titre de la page */}
           <div className="mb-6">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-white">
@@ -160,8 +176,9 @@ const Form = () => {
             </div>
           </div>
 
+          {/* Formulaire principal */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Date */}
+            {/* Sélection de la date */}
             <div>
               <label className="block text-left text-sm font-medium text-white mb-2">
                 Date
@@ -176,7 +193,7 @@ const Form = () => {
               </div>
             </div>
 
-            {/* Pays */}
+            {/* Sélection du pays */}
             <div>
               <label className="block text-left text-sm font-medium text-white mb-2">
                 Country
@@ -201,7 +218,7 @@ const Form = () => {
               />
             </div>
 
-            {/* Ville */}
+            {/* Sélection de la ville */}
             <div>
               <label className="block text-left text-sm font-medium text-white mb-2">
                 City
@@ -217,7 +234,7 @@ const Form = () => {
               />
             </div>
 
-            {/* Lieux */}
+            {/* Lieu du concert */}
             <div>
               <label className="block text-left text-sm font-medium text-white mb-2">
                 Place / Event
@@ -230,7 +247,7 @@ const Form = () => {
               />
             </div>
 
-            {/* Disponibilité */}
+            {/* Disponibilité du concert */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               <label className="text-sm font-medium text-white">
                 Disponibility
@@ -248,7 +265,7 @@ const Form = () => {
               </button>
             </div>
 
-            {/* Submit */}
+            {/* Bouton de soumission */}
             <div className="pt-4">
               <button
                 type="submit"
@@ -268,8 +285,9 @@ const Form = () => {
           </form>
         </div>
       ) : (
+        // Message d’erreur si l’utilisateur n’est pas connecté
         <div className="flex flex-1 justify-center items-center text-center mt-80">
-          <p className="  text-7xl text-white">Vous ne passerez PAS!!!!!!!</p>
+          <p className="text-7xl text-white">Vous ne passerez PAS!!!!!!!</p>
         </div>
       )}
     </>
